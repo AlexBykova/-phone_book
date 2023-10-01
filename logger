@@ -1,0 +1,77 @@
+from data_create import *
+
+def enter_data():
+    name = enter_first_name()
+    surname = enter_second_name()
+    family = enter_family_name()
+    phone = enter_phone_number()
+    address = enter_address_name()
+    with open('book.txt', 'a', encoding = 'utf-8') as file:
+        file.write(f'{name}  {surname}  {family} \n {phone} \n {address}\n\n')
+
+def print_data():
+    with open('book.txt', 'r', encoding='utf-8') as file:
+        print (file.read())
+
+def search_line():
+    print("Выберете вариант поиска:\n"
+          "1. Имя\n"
+          "2. Фамилия\n"
+          "3. Отчество\n"
+          "4. Телефон\n"
+          "5. Адрес")
+    index = int(input('Введите вариант: ')) - 1
+    searchline = input("Введите данные для поиска: ").title()
+    with open('book.txt', 'r', encoding='utf-8') as file:
+        data = file.read().strip().split('\n\n')
+        for item in data:
+            new_item = item.replace('\n', ' ').split()
+            if searchline in new_item[index]:
+                print(item, end = '\n\n')
+
+def delete_line():
+    print("Подтвердите удаление данных:\n"
+          "'1. Да, я хочу удалить свои данные!'\n"
+          "'2. Нет, команда введена ошибочно.'\n")
+    flag = input('Введите номер ответа: ')
+    if flag == '1':
+        index = 3
+        searchline = input("Введите Ваш номер телефона: ")
+        with open('book.txt', 'r+', encoding='utf-8') as file:
+            data = file.read().strip().split('\n\n')
+            for item in data:
+                new_item = item.replace('\n', ' ').split()
+                if searchline in new_item[index]:
+                    data.remove(item)
+            file.seek(0)
+            file.truncate()
+            for item in data:
+                file.write(f'{item}\n\n')
+            print("Ваши данные успешно удалены!")
+            print()
+
+def rewrite_line():
+    searchline = input("Введите Ваш номер телефона: ")
+    index_phone = 3
+    print("Какие данные Вы хотите изменить?\n"
+          "1. Имя\n"
+          "2. Фамилия\n"
+          "3. Отчество\n"
+          "4. Телефон\n"
+          "5. Адрес")
+    index = int(input('Введите вариант: ')) - 1
+    information = input("Введите информацию, которую Вы ходите внести: ").title()
+    new_data =[]
+    with open('book.txt', 'r+', encoding='utf-8') as file:
+        data = file.read().strip().split('\n\n')
+        for item in data:
+            new_item = item.replace('\n', ' ').split()
+            if searchline in new_item[index_phone]:
+                new_item[index] = information
+            new_data.append(f'{new_item[0]} {new_item[1]}  {new_item[2]} \n {new_item[3]} \n {new_item[4]}\n\n')
+        file.seek(0)
+        file.truncate()
+        for item in new_data:
+            file.write(f'{item}')
+        print("Ваши данные успешно изменены!")
+        print()
